@@ -1,6 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-
 import { css } from '@emotion/react';
 
 import { Footer } from '../components/Footer';
@@ -35,11 +33,10 @@ const PageTemplate = css`
 `;
 
 function About() {
+  const Head = () => <title>About</title>
   return (
     <IndexLayout>
-      <Helmet>
-        <title>About</title>
-      </Helmet>
+      <Head />
       <Wrapper css={PageTemplate}>
         <header className="site-archive-header no-image" css={[SiteHeader, SiteArchiveHeader]}>
           <div css={[outer, SiteNavMain]}>

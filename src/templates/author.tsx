@@ -24,7 +24,7 @@ import {
   SiteHeaderBackground,
 } from '../styles/shared';
 import type { PageContext } from './post';
-import { Helmet } from 'react-helmet';
+
 import config from '../website-config';
 
 type AuthorTemplateProps = {
@@ -71,38 +71,43 @@ function Author({ data, location }: AuthorTemplateProps) {
 
     return isDraft && authorParticipated;
   });
+
+  const Head = () => {
+    return (<>
+      <html lang={config.lang} />
+      <title>
+        {author.name} - {config.title}
+      </title>
+      <meta name="description" content={author.bio} />
+      <meta property="og:site_name" content={config.title} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:title" content={`${author.name} - ${config.title}`} />
+      <meta property="og:url" content={config.siteUrl + location.pathname} />
+      <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+      <meta property="article:author" content="https://www.facebook.com/ghost" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={`${author.name} - ${config.title}`} />
+      <meta name="twitter:url" content={config.siteUrl + location.pathname} />
+      {config.twitter && (
+        <meta
+          name="twitter:site"
+          content={`@${config.twitter.split('https://twitter.com/')[1]}`}
+        />
+      )}
+      {config.twitter && (
+        <meta
+          name="twitter:creator"
+          content={`@${config.twitter.split('https://twitter.com/')[1]}`}
+        />
+      )}
+    </>)
+  }
+
   const totalCount = edges.length;
 
   return (
     <IndexLayout>
-      <Helmet>
-        <html lang={config.lang} />
-        <title>
-          {author.name} - {config.title}
-        </title>
-        <meta name="description" content={author.bio} />
-        <meta property="og:site_name" content={config.title} />
-        <meta property="og:type" content="profile" />
-        <meta property="og:title" content={`${author.name} - ${config.title}`} />
-        <meta property="og:url" content={config.siteUrl + location.pathname} />
-        <meta property="article:publisher" content="https://www.facebook.com/ghost" />
-        <meta property="article:author" content="https://www.facebook.com/ghost" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={`${author.name} - ${config.title}`} />
-        <meta name="twitter:url" content={config.siteUrl + location.pathname} />
-        {config.twitter && (
-          <meta
-            name="twitter:site"
-            content={`@${config.twitter.split('https://twitter.com/')[1]}`}
-          />
-        )}
-        {config.twitter && (
-          <meta
-            name="twitter:creator"
-            content={`@${config.twitter.split('https://twitter.com/')[1]}`}
-          />
-        )}
-      </Helmet>
+      <Head />
       <Wrapper>
         <header className="site-archive-header" css={[SiteHeader, SiteArchiveHeader]}>
           <div css={[outer, SiteNavMain]}>

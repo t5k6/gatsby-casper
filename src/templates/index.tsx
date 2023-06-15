@@ -1,7 +1,6 @@
 import { graphql } from 'gatsby';
 import { getSrc, getImage } from 'gatsby-plugin-image';
 import React from 'react';
-import { Helmet } from 'react-helmet';
 
 import { css } from '@emotion/react';
 
@@ -46,37 +45,39 @@ export type IndexProps = {
 function IndexPage(props: IndexProps) {
   const width = getImage(props.data.header)?.width;
   const height = getImage(props.data.header)?.height;
-
+  const Head = () => {
+    return (<>
+      <html lang={config.lang} />
+      <title>{config.title}</title>
+      <meta name="description" content={config.description} />
+      <meta property="og:site_name" content={config.title} />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={config.title} />
+      <meta property="og:description" content={config.description} />
+      <meta property="og:url" content={config.siteUrl} />
+      <meta property="og:image" content={`${config.siteUrl}${getSrc(props.data.header)}`} />
+      {config.facebook && <meta property="article:publisher" content={config.facebook} />}
+      {config.googleSiteVerification && (
+        <meta name="google-site-verification" content={config.googleSiteVerification} />
+      )}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={config.title} />
+      <meta name="twitter:description" content={config.description} />
+      <meta name="twitter:url" content={config.siteUrl} />
+      <meta name="twitter:image" content={`${config.siteUrl}${getSrc(props.data.header)}`} />
+      {config.twitter && (
+        <meta
+          name="twitter:site"
+          content={`@${config.twitter.split('https://twitter.com/')[1]}`}
+        />
+      )}
+      <meta property="og:image:width" content={width?.toString()} />
+      <meta property="og:image:height" content={height?.toString()} />
+    </>)
+  }
   return (
     <IndexLayout css={HomePosts}>
-      <Helmet>
-        <html lang={config.lang} />
-        <title>{config.title}</title>
-        <meta name="description" content={config.description} />
-        <meta property="og:site_name" content={config.title} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={config.title} />
-        <meta property="og:description" content={config.description} />
-        <meta property="og:url" content={config.siteUrl} />
-        <meta property="og:image" content={`${config.siteUrl}${getSrc(props.data.header)}`} />
-        {config.facebook && <meta property="article:publisher" content={config.facebook} />}
-        {config.googleSiteVerification && (
-          <meta name="google-site-verification" content={config.googleSiteVerification} />
-        )}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={config.title} />
-        <meta name="twitter:description" content={config.description} />
-        <meta name="twitter:url" content={config.siteUrl} />
-        <meta name="twitter:image" content={`${config.siteUrl}${getSrc(props.data.header)}`} />
-        {config.twitter && (
-          <meta
-            name="twitter:site"
-            content={`@${config.twitter.split('https://twitter.com/')[1]}`}
-          />
-        )}
-        <meta property="og:image:width" content={width?.toString()} />
-        <meta property="og:image:height" content={height?.toString()} />
-      </Helmet>
+      <Head />
       <Wrapper>
         <div
           css={[outer, SiteHeader, SiteHeaderStyles]}

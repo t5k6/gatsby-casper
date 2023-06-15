@@ -22,7 +22,7 @@ import {
   SiteHeaderBackground,
 } from '../styles/shared';
 import type { PageContext } from './post';
-import { Helmet } from 'react-helmet';
+
 import config from '../website-config';
 
 type TagTemplateProps = {
@@ -56,29 +56,33 @@ function Tags({ pageContext, data, location }: TagTemplateProps) {
     n => n.node.yamlId.toLowerCase() === tag.toLowerCase(),
   );
 
+  const Head = () => {
+    return (<>
+      <html lang={config.lang} />
+      <title>
+        {tag} - {config.title}
+      </title>
+      <meta name="description" content={tagData?.node ? tagData.node.description : ''} />
+      <meta property="og:site_name" content={config.title} />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={`${tag} - ${config.title}`} />
+      <meta property="og:url" content={config.siteUrl + location.pathname} />
+      {config.facebook && <meta property="article:publisher" content={config.facebook} />}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={`${tag} - ${config.title}`} />
+      <meta name="twitter:url" content={config.siteUrl + location.pathname} />
+      {config.twitter && (
+        <meta
+          name="twitter:site"
+          content={`@${config.twitter.split('https://twitter.com/')[1]}`}
+        />
+      )}
+    </>)
+  }
+
   return (
     <IndexLayout>
-      <Helmet>
-        <html lang={config.lang} />
-        <title>
-          {tag} - {config.title}
-        </title>
-        <meta name="description" content={tagData?.node ? tagData.node.description : ''} />
-        <meta property="og:site_name" content={config.title} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={`${tag} - ${config.title}`} />
-        <meta property="og:url" content={config.siteUrl + location.pathname} />
-        {config.facebook && <meta property="article:publisher" content={config.facebook} />}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${tag} - ${config.title}`} />
-        <meta name="twitter:url" content={config.siteUrl + location.pathname} />
-        {config.twitter && (
-          <meta
-            name="twitter:site"
-            content={`@${config.twitter.split('https://twitter.com/')[1]}`}
-          />
-        )}
-      </Helmet>
+      <Head />
       <Wrapper>
         <header className="site-archive-header" css={[SiteHeader, SiteArchiveHeader]}>
           <div css={[outer, SiteNavMain]}>
